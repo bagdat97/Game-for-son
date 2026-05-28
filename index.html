@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Балалар ойыны 🌟</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #e0f4ff;
+    --sun: #FFD93D;
+    --grass: #6BCB77;
+    --earth: #A0522D;
+    --card-r: 24px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--sky);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated sky background */
+  .bg-scene {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(180deg, #87CEEB 0%, #c9eaff 55%, #d4f5c4 100%);
+    overflow: hidden;
+  }
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.82;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud:nth-child(1) { width: 120px; height: 38px; top: 8%; animation-duration: 28s; animation-delay: 0s; }
+  .cloud:nth-child(1)::before { width: 60px; height: 60px; top: -30px; left: 20px; }
+  .cloud:nth-child(1)::after { width: 40px; height: 40px; top: -20px; left: 55px; }
+  .cloud:nth-child(2) { width: 90px; height: 28px; top: 18%; animation-duration: 38s; animation-delay: -12s; opacity: 0.65; }
+  .cloud:nth-child(2)::before { width: 45px; height: 45px; top: -22px; left: 15px; }
+  .cloud:nth-child(3) { width: 150px; height: 45px; top: 5%; animation-duration: 48s; animation-delay: -25s; opacity: 0.55; }
+  .cloud:nth-child(3)::before { width: 70px; height: 70px; top: -35px; left: 25px; }
+  .cloud:nth-child(3)::after { width: 50px; height: 50px; top: -25px; left: 70px; }
+
+  @keyframes drift { from { transform: translateX(-200px); } to { transform: translateX(110vw); } }
+
+  /* Sun */
+  .sun {
+    position: fixed; top: 20px; right: 24px; width: 64px; height: 64px;
+    background: var(--sun);
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px rgba(255,217,61,0.2), 0 0 0 20px rgba(255,217,61,0.1);
+    animation: pulse-sun 3s ease-in-out infinite;
+    z-index: 1;
+  }
+  .sun::before {
+    content: '☀️'; font-size: 48px;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: none;
+  }
+  @keyframes pulse-sun { 0%,100% { box-shadow: 0 0 0 10px rgba(255,217,61,0.2), 0 0 0 20px rgba(255,217,61,0.1); } 50% { box-shadow: 0 0 0 14px rgba(255,217,61,0.25), 0 0 0 28px rgba(255,217,61,0.12); } }
+
+  .wrapper {
+    position: relative; z-index: 2;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 16px 12px 40px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 12px 0 8px;
+  }
+  .header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2rem, 7vw, 3rem);
+    color: #2d5a27;
+    text-shadow: 3px 3px 0 rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+  }
+  .header p {
+    font-size: 1.05rem;
+    color: #3a7a32;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 14px 0 18px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    position: relative;
+    top: 0;
+    user-select: none;
+  }
+  .tab:active { top: 3px; box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .tab.animals { background: #FF9A3C; color: white; }
+  .tab.colors  { background: #A855F7; color: white; }
+  .tab.numbers { background: #3B82F6; color: white; }
+  .tab.inactive { background: white; color: #888; box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
+
+  /* Speech bubble */
+  .bubble-wrap { text-align: center; margin-bottom: 16px; min-height: 70px; }
+  .bubble {
+    display: inline-block;
+    background: white;
+    border-radius: 20px;
+    padding: 12px 24px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    box-shadow: var(--shadow);
+    position: relative;
+    animation: bobble 0.4s ease;
+    max-width: 90%;
+  }
+  .bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -14px; left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: white;
+  }
+  @keyframes bobble { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.06); } 100% { transform: scale(1); opacity: 1; } }
+
+  /* Section */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Animal Grid */
+  .animal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .animal-card {
+    background: white;
+    border-radius: var(--card-r);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.15s;
+    user-select: none;
+    position: relative;
+    top: 0;
+  }
+  .animal-card:active { transform: scale(0.93); }
+  .animal-card.pop { animation: card-pop 0.4s ease forwards; }
+  @keyframes card-pop {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.15) rotate(-2deg); }
+    65% { transform: scale(0.97) rotate(1deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  .animal-img-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #f0f0f0;
+    position: relative;
+  }
+  .animal-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+    display: block;
+  }
+  .animal-card:active .animal-img-wrap img { transform: scale(1.08); }
+
+  .sound-wave {
+    position: absolute; top: 6px; right: 6px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .animal-card.playing .sound-wave { opacity: 1; animation: wave 0.6s ease infinite; }
+  @keyframes wave { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+
+  .animal-info {
+    padding: 8px 10px 10px;
+    text-align: center;
+  }
+  .animal-kaz {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(0.95rem, 3vw, 1.15rem);
+    color: #1a1a1a;
+  }
+  .animal-sound {
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Color Grid */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .color-card {
+    border-radius: var(--card-r);
+    aspect-ratio: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s;
+    user-select: none;
+    padding: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .color-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .color-card:active { transform: scale(0.91); }
+  .color-card:active::before { opacity: 1; }
+  .color-card.pop { animation: card-pop 0.4s ease; }
+  .color-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .color-example {
+    margin-top: 6px;
+    font-size: 2rem;
+  }
+
+  /* Number Grid */
+  .number-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 400px) {
+    .number-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .animal-grid, .color-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .num-card {
+    background: white;
+    border-radius: 18px;
+    padding: 10px 4px 8px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s;
+    user-select: none;
+  }
+  .num-card:active { transform: scale(0.9); }
+  .num-card.pop { animation: card-pop 0.4s ease; }
+  .num-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    color: #333;
+    line-height: 1;
+  }
+  .num-dots {
+    font-size: clamp(0.55rem, 2vw, 0.7rem);
+    line-height: 1.3;
+    color: #555;
+    min-height: 22px;
+    word-break: break-all;
+    padding: 2px 2px 0;
+  }
+  .num-kaz {
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    color: #888;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* Stars animation */
+  .star-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    font-size: 28px;
+    animation: star-fly 0.9s ease forwards;
+  }
+  @keyframes star-fly {
+    0% { opacity: 1; transform: scale(0.5) translate(0,0); }
+    100% { opacity: 0; transform: scale(1.5) translate(var(--tx), var(--ty)); }
+  }
+
+  /* Footer grass */
+  .grass-footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: #6BCB77;
+    z-index: 3;
+    border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-scene">
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+</div>
+<div class="sun"></div>
+
+<div class="wrapper">
+  <div class="header">
+    <h1>🌟 Балалар ойыны</h1>
+    <p>Суретті бас — үйрен!</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab animals active-tab" onclick="showSection('animals', this)">🐾 Жануарлар</button>
+    <button class="tab colors inactive" onclick="showSection('colors', this)">🎨 Түстер</button>
+    <button class="tab numbers inactive" onclick="showSection('numbers', this)">🔢 Сандар</button>
+  </div>
+
+  <div class="bubble-wrap">
+    <div class="bubble" id="bubble">Суретті бас! 👇</div>
+  </div>
+
+  <!-- ANIMALS -->
+  <div class="section active" id="animals">
+    <div class="animal-grid" id="animal-grid"></div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="section" id="colors">
+    <div class="color-grid" id="color-grid"></div>
+  </div>
+
+  <!-- NUMBERS -->
+  <div class="section" id="numbers">
+    <div class="number-grid" id="number-grid"></div>
+  </div>
+</div>
+
+<div class="grass-footer"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const animals = [
+  { kaz:'Мысық',    ru:'Кошка',    sound:'Мияу-мияу!',        speak:'мияу мияу',        emoji:'🐱', photo:'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80' },
+  { kaz:'Ит',       ru:'Собака',   sound:'Ав-ав!',             speak:'ав ав',             emoji:'🐶', photo:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80' },
+  { kaz:'Сиыр',     ru:'Корова',   sound:'Мөөөөө!',            speak:'мөөөөөөөөө',        emoji:'🐄', photo:'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&q=80' },
+  { kaz:'Қой',      ru:'Овца',     sound:'Мәәәәәәәәә!',        speak:'мааааааа',          emoji:'🐑', photo:'https://images.unsplash.com/photo-1484557985045-edf25e08da73?w=400&q=80' },
+  { kaz:'Жылқы',   ru:'Лошадь',   sound:'Иіһіһіһі!',         speak:'иіһіһіһіһіһіһі',   emoji:'🐴', photo:'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=400&q=80' },
+  { kaz:'Тауық',   ru:'Курица',   sound:'Қытыр-қытыр!',       speak:'ко ко ко ко',       emoji:'🐔', photo:'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&q=80' },
+  { kaz:'Бақа',    ru:'Лягушка',  sound:'Бәк-бәк!',           speak:'бак бак бак',       emoji:'🐸', photo:'https://images.unsplash.com/photo-1459262838948-3e2de6c1ec80?w=400&q=80' },
+  { kaz:'Арыстан', ru:'Лев',      sound:'Ырр-ырр!',           speak:'ырырырырырыр',      emoji:'🦁', photo:'https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?w=400&q=80' },
+  { kaz:'Піл',     ru:'Слон',     sound:'Пүүүүүүү!',          speak:'пүүүүүүүүүүүүүүү', emoji:'🐘', photo:'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=400&q=80' },
+];
+
+const colors = [
+  { kaz:'Қызыл',        bg:'#E63946', text:'#fff',   example:'🍎', speak:'қызыл' },
+  { kaz:'Көк',          bg:'#4A90D9', text:'#fff',   example:'🫐', speak:'көк' },
+  { kaz:'Жасыл',        bg:'#4CAF50', text:'#fff',   example:'🌿', speak:'жасыл' },
+  { kaz:'Сары',         bg:'#FFD600', text:'#5a4000',example:'🌻', speak:'сары' },
+  { kaz:'Қызғылт',      bg:'#F06292', text:'#fff',   example:'🌸', speak:'қызғылт' },
+  { kaz:'Қара',         bg:'#222',    text:'#fff',   example:'🐧', speak:'қара' },
+  { kaz:'Ақ',           bg:'#f5f5f5', text:'#333',   example:'🤍', speak:'ақ' },
+  { kaz:'Күлгін',       bg:'#9C27B0', text:'#fff',   example:'🍇', speak:'күлгін' },
+  { kaz:'Қызғылт сары', bg:'#FF7043', text:'#fff',   example:'🍊', speak:'қызғылт сары' },
+];
+
+const numbers = [
+  { n:1,  kaz:'Бір',   dots:'●' },
+  { n:2,  kaz:'Екі',   dots:'●●' },
+  { n:3,  kaz:'Үш',    dots:'●●●' },
+  { n:4,  kaz:'Төрт',  dots:'●●●●' },
+  { n:5,  kaz:'Бес',   dots:'●●●●●' },
+  { n:6,  kaz:'Алты',  dots:'●●●●●●' },
+  { n:7,  kaz:'Жеті',  dots:'●●●●●●●' },
+  { n:8,  kaz:'Сегіз', dots:'●●●●●●●●' },
+  { n:9,  kaz:'Тоғыз', dots:'●●●●●●●●●' },
+  { n:10, kaz:'Он',    dots:'●●●●●●●●●●' },
+];
+
+// ── SPEECH ────────────────────────────────────────────────────────────────
+function speak(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang || 'ru-RU';
+  u.rate = 0.8;
+  u.pitch = 1.1;
+  window.speechSynthesis.speak(u);
+}
+
+function speakAnimal(a) {
+  // Say name in Kazakh then sound
+  window.speechSynthesis.cancel();
+  const u1 = new SpeechSynthesisUtterance(a.kaz);
+  u1.lang = 'ru-RU'; u1.rate = 0.8; u1.pitch = 1.2;
+  const u2 = new SpeechSynthesisUtterance(a.speak);
+  u2.lang = 'ru-RU'; u2.rate = 0.75; u2.pitch = 0.9;
+  window.speechSynthesis.speak(u1);
+  window.speechSynthesis.speak(u2);
+}
+
+// ── BUBBLE ────────────────────────────────────────────────────────────────
+function setBubble(text) {
+  const b = document.getElementById('bubble');
+  b.style.animation = 'none';
+  b.offsetHeight; // reflow
+  b.style.animation = '';
+  b.textContent = text;
+}
+
+// ── POP ANIMATION ─────────────────────────────────────────────────────────
+function popEl(el) {
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  el.addEventListener('animationend', () => el.classList.remove('pop'), { once: true });
+}
+
+// ── STARS ─────────────────────────────────────────────────────────────────
+function burstStars(e) {
+  const stars = ['⭐','🌟','✨','💫'];
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-burst';
+    s.textContent = stars[Math.floor(Math.random()*stars.length)];
+    const angle = (i / 5) * 360 + Math.random() * 30;
+    const dist = 60 + Math.random() * 60;
+    s.style.setProperty('--tx', Math.cos(angle * Math.PI/180) * dist + 'px');
+    s.style.setProperty('--ty', Math.sin(angle * Math.PI/180) * dist + 'px');
+    s.style.left = (e.clientX - 14) + 'px';
+    s.style.top  = (e.clientY - 14) + 'px';
+    document.body.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+}
+
+// ── BUILD ANIMALS ─────────────────────────────────────────────────────────
+const ag = document.getElementById('animal-grid');
+animals.forEach(a => {
+  const d = document.createElement('div');
+  d.className = 'animal-card';
+  d.innerHTML = `
+    <div class="animal-img-wrap">
+      <img src="${a.photo}" alt="${a.kaz}" loading="lazy">
+      <div class="sound-wave">🔊</div>
+    </div>
+    <div class="animal-info">
+      <div class="animal-kaz">${a.emoji} ${a.kaz}</div>
+      <div class="animal-sound">${a.sound}</div>
+    </div>`;
+  d.addEventListener('click', (e) => {
+    popEl(d);
+    burstStars(e);
+    d.classList.add('playing');
+    setTimeout(() => d.classList.remove('playing'), 1800);
+    setBubble(`${a.emoji} ${a.kaz}! ${a.sound}`);
+    speakAnimal(a);
+  });
+  ag.appendChild(d);
+});
+
+// ── BUILD COLORS ──────────────────────────────────────────────────────────
+const cg = document.getElementById('color-grid');
+colors.forEach(c => {
+  const d = document.createElement('div');
+  d.className = 'color-card';
+  d.style.background = c.bg;
+  d.innerHTML = `
+    <div class="color-name" style="color:${c.text}">${c.kaz}</div>
+    <div class="color-example">${c.example}</div>`;
+  d.addEventListener('click', (e) => {
+    popEl(d);
+    burstStars(e);
+    setBubble(`${c.example} Бұл — ${c.kaz}!`);
+    speak(c.kaz + '! ' + c.kaz, 'ru-RU');
+  });
+  cg.appendChild(d);
+});
+
+// ── BUILD NUMBERS ─────────────────────────────────────────────────────────
+const ng = document.getElementById('number-grid');
+const numColors = ['#FF6B6B','#FF9F43','#FFD93D','#6BCB77','#4ECDC4','#45B7D1','#A55EEA','#F06292','#26de81','#45aaf2'];
+numbers.forEach((n, i) => {
+  const d = document.createElement('div');
+  d.className = 'num-card';
+  d.style.borderTop = `4px solid ${numColors[i]}`;
+  d.innerHTML = `
+    <div class="num-big" style="color:${numColors[i]}">${n.n}</div>
+    <div class="num-dots" style="color:${numColors[i]}">${n.dots}</div>
+    <div class="num-kaz">${n.kaz}</div>`;
+  d.addEventListener('click', (e) => {
+    popEl(d);
+    burstStars(e);
+    const stars = '⭐'.repeat(Math.min(n.n, 10));
+    setBubble(`${n.n} — ${n.kaz}! ${stars}`);
+    speak(n.kaz + '! ' + n.n, 'ru-RU');
+  });
+  ng.appendChild(d);
+});
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.remove('active-tab');
+    t.classList.add('inactive');
+  });
+  btn.classList.add('active-tab');
+  btn.classList.remove('inactive');
+  setBubble('Суретті бас! 👇');
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+</script>
+</body>
+</html>
